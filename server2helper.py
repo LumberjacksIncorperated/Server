@@ -3,4 +3,4 @@ import time
 
 while True:
     os.system("screencapture screen.jpeg")
-    time.sleep(20)
+    time.sleep(1)
