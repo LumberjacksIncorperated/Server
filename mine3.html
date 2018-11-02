@@ -3,60 +3,62 @@
     Stream images from server which are screenshots and display them in VR
 
 -->
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Hello, WebVR! • A-Frame</title>
-    <meta name="description" content="Hello, WebVR! • A-Frame">
-    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-  </head>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello, WebVR! • A-Frame</title>
+        <meta name="description" content="Hello, WebVR! • A-Frame">
+        <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+      </head>
   
-  <body>
-    <script>
+    <body>
+        <script>
 
-    //------------------------------------------------------------------------------------------
-    // Client   
-    //------------------------------------------------------------------------------------------        
-    function updateFromHttpServer() {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open( "GET", "http://127.0.0.1:8080", false );
-      xmlHttp.send( null );
-      imsrc = "data:image/jpeg;base64," + xmlHttp.responseText;
-    }
+        //------------------------------------------------------------------------------------------
+        // Client   
+        //------------------------------------------------------------------------------------------        
+        function updateFromHttpServer() {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", "http://127.0.0.1:8080", false );
+            xmlHttp.send( null );
+            imsrc = "data:image/jpeg;base64," + xmlHttp.responseText;
+        }
 
-    //------------------------------------------------------------------------------------------
-    // Custom Entity    
-    //------------------------------------------------------------------------------------------
-     AFRAME.registerComponent('set-sky', {
-       schema: {default:''},
-       init: function() {
-         this.timeout = setInterval(this.updateSky.bind(this), 300);
-         this.sky = this.el;
-       },
-       remove: function() {
-         clearInterval(this.timeout);
-         this.el.removeObject3D(this.object3D);
-       },
-       updateSky: function() {
-         updateFromHttpServer();
-         var sceneEl = document.querySelector('a-scene');
-         var im = sceneEl.querySelector('#my-frame');
-         im.setAttribute( 'src', imsrc);
-       }
-     });
-    //------------------------------------------------------------------------------------------  
+        //------------------------------------------------------------------------------------------
+        // Custom Entity    
+        //------------------------------------------------------------------------------------------
+        AFRAME.registerComponent('set-sky', {
+            schema: {default:''},
+            
+            init: function() {
+                var sceneEl = document.querySelector('a-scene');
+                this.timeout = setInterval(this.updateSky.bind(this), 300);
+                this.sky = this.el;
+                 this.im = sceneEl.querySelector('#my-frame');
+            },
+     
+            remove: function() {
+                clearInterval(this.timeout);
+                this.el.removeObject3D(this.object3D);
+            },
+       
+            updateSky: function() {
+                updateFromHttpServer();
+                this.im.setAttribute( 'src', imsrc);
+            }
+        });
+        //------------------------------------------------------------------------------------------  
     
-    </script>
+        </script>
 
-    <a-scene background="color: #ECECEC">
-      <a-assets>
-        <img id="my-image" src="https://www.gstatic.com/webp/gallery/1.jpg" >
-      </a-assets>
-      <a-image id="my-frame" position="-1 1.5 -3" src="#my-image" width="4" height="4"></a-image>
-      <a-sky set-sky="out"></a-sky>
-    </a-scene>
+        <a-scene background="color: #ECECEC">
+            <a-assets>
+                <img id="my-image" src="https://www.gstatic.com/webp/gallery/1.jpg" >
+            </a-assets>
+            <a-image id="my-frame" position="-1 1.5 -3" src="#my-image" width="4" height="4"></a-image>
+            <a-sky set-sky="out"></a-sky>
+        </a-scene>
   
-  </body>
+    </body>
 </html>
