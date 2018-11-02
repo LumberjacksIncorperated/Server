@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+  </head>
+  <body>
+  
+    <script>
+    //------------------------------------------------------------------------------------------
+    // Web Socket Streaming    
+    //------------------------------------------------------------------------------------------        
+    function updateFromHttpServer() {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open( "GET", "http://127.0.0.1:8080", false ); // false for synchronous request
+      xmlHttp.send( null );
+      //imsrc = "data:image/jpeg;base64," + xmlHttp.responseText;
+      console.log(encode(new Uint8Array(xmlHttp.responseText)));
+      imsrc = "data:image/jpeg;base64," + xmlHttp.responseText;
+    }
+        
+    function encode (input) {
+      var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+      var output = "";
+      var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+      var i = 0;
+
+      while (i < input.length) {
+        chr1 = input[i++];
+        chr2 = i < input.length ? input[i++] : Number.NaN; // Not sure if the index
+        chr3 = i < input.length ? input[i++] : Number.NaN; // checks are needed here
+
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+            enc4 = 64;
+        }
+        output += keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                  keyStr.charAt(enc3) + keyStr.charAt(enc4);
+      }
+      return output;
+    }
+
+    //------------------------------------------------------------------------------------------
+    // Custom Entity    
+    //------------------------------------------------------------------------------------------
+     AFRAME.registerComponent('set-sky', {
+       schema: {default:''},
+       init: function() {
+         this.timeout = setInterval(this.updateSky.bind(this), 100);
+         this.sky = this.el;
+       },
+       remove: function() {
+         clearInterval(this.timeout);
+         this.el.removeObject3D(this.object3D);
+       },
+       updateSky: function() {
+         updateFromHttpServer();
+         var sceneEl = document.querySelector('a-scene');
+         var im = sceneEl.querySelector('#my-frame');
+         im.setAttribute( 'src', imsrc);
+       }
+     });
+    //------------------------------------------------------------------------------------------  
+    </script>
+
+    <a-scene background="color: #ECECEC">
+      <a-assets>
+        <img id="my-image" src="https://www.gstatic.com/webp/gallery/1.jpg" >
+      </a-assets>
+      <a-image id="my-frame" position="-1 1.5 -3" src="#my-image" width="4" height="4"></a-image>
+      <a-sky set-sky="out"></a-sky>
+    </a-scene>
+  
+  </body>
+</html>
+
+<!--
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" shadow></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
+-->
