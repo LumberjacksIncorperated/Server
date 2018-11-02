@@ -33,17 +33,7 @@ def serverLoop(server_class=HTTPServer, handler_class=ScreenSharingServer):
     httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
 
+##############
 # Start Server
+##############
 serverLoop()
-
-
-
-
-
-    #screenShot = Image.open(r"/Users/i346794/Desktop/Server/screen.jpeg")
-    #screenShot = screenShot.convert("RGB")
-    #maxsize = (1500, 1500)
-    #im_t = screenShot.thumbnail(maxsize, Image.ANTIALIAS)
-    #width, height = screenShot.size
-    #print("width = %d height - %d" % (width, height))
-    #screenShot.save("image.jpeg", 'JPEG')
