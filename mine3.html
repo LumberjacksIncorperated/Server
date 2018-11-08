@@ -1,14 +1,12 @@
 <!--
-
-    Stream images from server which are screenshots and display them in VR
-
+        Display screen sharing image in VR world
 -->
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Hello, WebVR! • A-Frame</title>
-        <meta name="description" content="Hello, WebVR! • A-Frame">
+        <title>Screen Sharing • A-Frame</title>
+        <meta name="description" content="Screen Sharing in VR • A-Frame">
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
       </head>
   
@@ -16,7 +14,7 @@
         <script>
 
         //------------------------------------------------------------------------------------------
-        // Client   
+        // Function to retrieve and update screen sharing image from server
         //------------------------------------------------------------------------------------------        
         function updateFromHttpServer() {
             var xmlHttp = new XMLHttpRequest();
@@ -26,7 +24,7 @@
         }
 
         //------------------------------------------------------------------------------------------
-        // Custom Entity    
+        // Sky entity, which also triggers update of image    
         //------------------------------------------------------------------------------------------
         AFRAME.registerComponent('set-sky', {
             schema: {default:''},
@@ -52,6 +50,9 @@
     
         </script>
 
+        <!--
+          A-frame Scene Setup 
+          -->
         <a-scene background="color: #ECECEC">
             <a-assets>
                 <img id="my-image" src="https://www.gstatic.com/webp/gallery/1.jpg" >
