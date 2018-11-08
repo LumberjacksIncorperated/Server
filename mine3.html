@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Screen Sharing • A-Frame</title>
+        <title> Screen Sharing • A-Frame </title>
         <meta name="description" content="Screen Sharing in VR • A-Frame">
         <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
       </head>
@@ -27,23 +27,23 @@
         // Sky entity, which also triggers update of image    
         //------------------------------------------------------------------------------------------
         AFRAME.registerComponent('set-sky', {
-            schema: {default:''},
+            schema: { default:'' },
             
             init: function() {
-                var sceneEl = document.querySelector('a-scene');
-                this.timeout = setInterval(this.updateSky.bind(this), 300);
+                var sceneEl = document.querySelector( 'a-scene' );
+                this.timeout = setInterval( this.updateSky.bind( this ), 300);
                 this.sky = this.el;
-                 this.im = sceneEl.querySelector('#my-frame');
+                this.im = sceneEl.querySelector( '#my-frame' );
             },
      
             remove: function() {
-                clearInterval(this.timeout);
-                this.el.removeObject3D(this.object3D);
+                clearInterval( this.timeout );
+                this.el.removeObject3D( this.object3D );
             },
        
             updateSky: function() {
                 updateFromHttpServer();
-                this.im.setAttribute( 'src', imsrc);
+                this.im.setAttribute( 'src', imsrc );
             }
         });
         //------------------------------------------------------------------------------------------  
