@@ -11,6 +11,9 @@ import cv2
 from cStringIO import StringIO
 import time
 
+##########################################################################
+# Screen Sharing HTTP Server Class
+##########################################################################
 class ScreenSharingServer(BaseHTTPRequestHandler):
     def write_headers(self):
         self.send_response(200)
@@ -22,12 +25,18 @@ class ScreenSharingServer(BaseHTTPRequestHandler):
         self.write_headers()
         self.wfile.write(capture_image());
 
+##########################################################################
+# Function to take screenshot and return it encoded in base64
+##########################################################################
 def capture_image():
     os.system("screencapture screen.jpeg")
     with open("/Users/i346794/Desktop/Server/screen.jpeg", "rb") as f:
        data = f.read()
        return data.encode("base64")
-        
+
+##########################################################################
+# Function to initiate server loop on port 8080 as HTTP 
+##########################################################################
 def serverLoop(server_class=HTTPServer, handler_class=ScreenSharingServer):
     server_address = ('', 8080)
     httpd = server_class(server_address, handler_class)
